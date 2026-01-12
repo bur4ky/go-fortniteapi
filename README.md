@@ -28,15 +28,9 @@ import (
 
 func main() {
 	client := fortniteapi.New(fortniteapi.LanguageEnglish, os.Getenv("FORTNITE_API_KEY"))
-
-	flags := fortniteapi.CombineFlags(
-		fortniteapi.FlagIncludePaths,
-		fortniteapi.FlagIncludeGameplayTags,
-	)
-
 	searchParams := &fortniteapi.SearchBRCosmeticParams{
 		Name:          "Peely",
-		ResponseFlags: flags,
+		ResponseFlags: fortniteapi.FlagIncludePaths | fortniteapi.FlagIncludeGameplayTags,
 	}
 
 	cosmetic, err := client.Cosmetics.SearchBRCosmetic(context.TODO(), searchParams)

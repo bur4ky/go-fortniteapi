@@ -13,12 +13,3 @@ const (
 
 	FlagAll = FlagIncludePaths | FlagIncludeGameplayTags | FlagIncludeShopHistory
 )
-
-func CombineFlags(flags ...ResponseFlag) ResponseFlag {
-	var result ResponseFlag
-	for _, flag := range flags {
-		result |= flag
-	}
-
-	return result
-}
