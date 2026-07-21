@@ -3,8 +3,8 @@ package fortniteapi
 import "context"
 
 type CreatorCodeParams struct {
-	Name          string       `url:"name"`
-	ResponseFlags ResponseFlag `url:"responseFlags,omitempty"`
+	Name          string        `url:"name"`
+	ResponseFlags ResponseFlags `url:"responseFlags,omitempty"`
 }
 
 type CreatorCodeAccount struct {
@@ -33,6 +33,5 @@ func (s *CreatorCodeService) Get(ctx context.Context, name string, params *Creat
 	}
 
 	params.Name = name
-
-	return getJSON[CreatorCodeResponse](ctx, s.client, "/v2/creatorcode", params)
+	return getJSON[*CreatorCodeResponse](ctx, s.client, "/v2/creatorcode", params)
 }

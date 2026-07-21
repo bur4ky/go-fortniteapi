@@ -30,5 +30,5 @@ type MapService struct {
 }
 
 func (s *MapService) BR(ctx context.Context, params *BRMapParams) (*BRMapResponse, error) {
-	return getJSON[BRMapResponse](ctx, s.client, "/v1/map", params)
+	return getJSON[*BRMapResponse](ctx, s.client, "/v1/map", params)
 }

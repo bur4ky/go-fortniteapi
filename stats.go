@@ -1,8 +1,12 @@
 package fortniteapi
 
-import "context"
+import (
+	"context"
 
-// StatsAccountType represents the type of account for fetching stats.
+	"golang.org/x/time/rate"
+)
+
+// StatsAccountType sets the type of account for fetching stats.
 //
 // Default: StatsAccountEpic
 type StatsAccountType string
@@ -13,7 +17,7 @@ const (
 	StatsAccountXBL  StatsAccountType = "xbl"
 )
 
-// StatsTimeWindow represents the time window for fetching stats.
+// StatsTimeWindow sets the time window for fetching stats.
 //
 // Default: StatsTimeWindowLifetime
 type StatsTimeWindow string
@@ -23,7 +27,7 @@ const (
 	StatsTimeWindowLifetime StatsTimeWindow = "lifetime"
 )
 
-// StatsImage represents the input device type for fetching stats.
+// StatsImage sets the platform for the generated image
 //
 // Default: StatsImageNone
 type StatsImage string
@@ -41,13 +45,13 @@ type BRStatsByNameParams struct {
 	AccountType   StatsAccountType `url:"accountType,omitempty"`
 	TimeWindow    StatsTimeWindow  `url:"timeWindow,omitempty"`
 	Image         StatsImage       `url:"image,omitempty"`
-	ResponseFlags ResponseFlag     `url:"responseFlags,omitempty"`
+	ResponseFlags ResponseFlags    `url:"responseFlags,omitempty"`
 }
 
 type BRStatsByIDParams struct {
 	TimeWindow    StatsTimeWindow `url:"timeWindow,omitempty"`
 	Image         StatsImage      `url:"image,omitempty"`
-	ResponseFlags ResponseFlag    `url:"responseFlags,omitempty"`
+	ResponseFlags ResponseFlags   `url:"responseFlags,omitempty"`
 }
 
 type BRStatsAccount struct {
@@ -111,12 +115,21 @@ type BRStatsResponse struct {
 }
 
 type StatsService struct {
-	client *Client
+	client  *Client
+	limiter *rate.Limiter
+}
+
+func (s *StatsService) SetLimiter(rl *rate.Limiter) {
+	s.limiter = rl
 }
 
 func (s *StatsService) BRByName(ctx context.Context, name string, params *BRStatsByNameParams) (*BRStatsResponse, error) {
+	if err := s.limiter.Wait(ctx); err != nil {
+		return nil, err
+	}
+
 	if s.client.apiKey == "" {
-		return nil, ErrNoAPIKey
+		return nil, ErrMissingAPIKey
 	}
 
 	if name == "" {
@@ -128,18 +141,21 @@ func (s *StatsService) BRByName(ctx context.Context, name string, params *BRStat
 	}
 
 	params.Name = name
-
-	return getJSON[BRStatsResponse](ctx, s.client, "/v2/stats/br/v2", params)
+	return getJSON[*BRStatsResponse](ctx, s.client, "/v2/stats/br/v2", params)
 }
 
 func (s *StatsService) BRByID(ctx context.Context, id string, params *BRStatsByIDParams) (*BRStatsResponse, error) {
+	if err := s.limiter.Wait(ctx); err != nil {
+		return nil, err
+	}
+
 	if s.client.apiKey == "" {
-		return nil, ErrNoAPIKey
+		return nil, ErrMissingAPIKey
 	}
 
 	if id == "" {
 		return nil, emptyParamErr("id")
 	}
 
-	return getJSON[BRStatsResponse](ctx, s.client, "/v2/stats/br/v2/"+id, params)
+	return getJSON[*BRStatsResponse](ctx, s.client, "/v2/stats/br/v2/"+id, params)
 }

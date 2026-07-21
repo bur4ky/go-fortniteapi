@@ -16,8 +16,8 @@ const (
 )
 
 type AESKeysParams struct {
-	KeyFormat     AESKeyFormat `url:"keyFormat"`
-	ResponseFlags ResponseFlag `url:"responseFlags,omitempty"`
+	KeyFormat     AESKeyFormat  `url:"keyFormat"`
+	ResponseFlags ResponseFlags `url:"responseFlags,omitempty"`
 }
 
 type AESDynamicKey struct {
@@ -38,5 +38,5 @@ type AESService struct {
 }
 
 func (s *AESService) Keys(ctx context.Context, params *AESKeysParams) (*AESKeysResponse, error) {
-	return getJSON[AESKeysResponse](ctx, s.client, "/v2/aes", params)
+	return getJSON[*AESKeysResponse](ctx, s.client, "/v2/aes", params)
 }

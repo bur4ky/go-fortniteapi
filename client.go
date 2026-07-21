@@ -11,15 +11,16 @@ import (
 	"time"
 
 	querypkg "github.com/google/go-querystring/query"
+	"golang.org/x/time/rate"
 )
 
-const (
-	version = "v1.0.0"
-	baseURL = "https://fortnite-api.com"
-)
+const version = "v1.0.0"
 
 var (
-	ErrNoAPIKey       = fmt.Errorf("missing API key")
+	baseURL, _ = url.Parse("https://fortnite-api.com")
+
+	ErrMissingAPIKey  = fmt.Errorf("missing API key")
+	ErrInvalidAPIKey  = fmt.Errorf("invalid API key")
 	ErrEmptyParameter = fmt.Errorf("missing required parameter")
 )
 
@@ -38,9 +39,9 @@ func (e *APIError) Error() string {
 }
 
 type Client struct {
-	httpClient *http.Client
-	apiKey     string
-	language   Language
+	http     *http.Client
+	apiKey   string
+	language Language
 
 	AES         *AESService
 	Banners     *BannersService
@@ -67,9 +68,9 @@ func NewWithClient(language Language, apiKey string, client *http.Client) *Clien
 	}
 
 	c := &Client{
-		httpClient: client,
-		apiKey:     apiKey,
-		language:   language,
+		http:     client,
+		apiKey:   apiKey,
+		language: language,
 	}
 
 	c.AES = &AESService{client: c}
@@ -80,13 +81,16 @@ func NewWithClient(language Language, apiKey string, client *http.Client) *Clien
 	c.News = &NewsService{client: c}
 	c.Playlists = &PlaylistsService{client: c}
 	c.Shop = &ShopService{client: c}
-	c.Stats = &StatsService{client: c}
+	c.Stats = &StatsService{
+		client:  c,
+		limiter: rate.NewLimiter(3, 3),
+	}
 
 	return c
 }
 
-func (c *Client) fetch(ctx context.Context, method, path string, query, body, out any) error {
-	fullURL, err := c.buildURL(path, query)
+func (c *Client) do(ctx context.Context, method, path string, query, body, out any) error {
+	fullURL, err := c.fullURL(path, query)
 	if err != nil {
 		return err
 	}
@@ -96,32 +100,31 @@ func (c *Client) fetch(ctx context.Context, method, path string, query, body, ou
 		return err
 	}
 
-	response, err := c.httpClient.Do(request)
+	response, err := c.http.Do(request)
 	if err != nil {
-		return fmt.Errorf("failed to send request: %w", err)
+		return fmt.Errorf("send request: %w", err)
 	}
 
 	defer response.Body.Close()
-
 	decoder := json.NewDecoder(response.Body)
 
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		var apiError APIError
-		if err := decoder.Decode(&apiError); err != nil {
-			return fmt.Errorf("failed to decode response: %w", err)
+		var apiError *APIError
+		if err := decoder.Decode(apiError); err != nil {
+			return fmt.Errorf("decode error response: %w", err)
 		}
 
-		return &apiError
+		return apiError
 	}
 
 	var apiResponse APIResponse[json.RawMessage]
 	if err := decoder.Decode(&apiResponse); err != nil {
-		return fmt.Errorf("failed to decode response: %w", err)
+		return fmt.Errorf("decode response: %w", err)
 	}
 
 	if out != nil {
 		if err := json.Unmarshal(apiResponse.Data, out); err != nil {
-			return fmt.Errorf("failed to unmarshal data from response: %w", err)
+			return fmt.Errorf("unmarshal data: %w", err)
 		}
 	}
 
@@ -134,7 +137,7 @@ func (c *Client) newRequest(ctx context.Context, method, urlStr string, body any
 	if body != nil {
 		jsonBytes, err := json.Marshal(body)
 		if err != nil {
-			return nil, fmt.Errorf("failed to marshal request body: %w", err)
+			return nil, fmt.Errorf("marshal request body: %w", err)
 		}
 
 		bodyReader = bytes.NewReader(jsonBytes)
@@ -142,7 +145,7 @@ func (c *Client) newRequest(ctx context.Context, method, urlStr string, body any
 
 	request, err := http.NewRequestWithContext(ctx, method, urlStr, bodyReader)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create new request: %w", err)
+		return nil, fmt.Errorf("create request: %w", err)
 	}
 
 	request.Header.Set("User-Agent", "go-fortniteapi/"+version)
@@ -158,10 +161,10 @@ func (c *Client) newRequest(ctx context.Context, method, urlStr string, body any
 	return request, nil
 }
 
-func (c *Client) buildURL(path string, query any) (*url.URL, error) {
-	fullURL, err := url.Parse(baseURL + path)
+func (c *Client) fullURL(path string, query any) (*url.URL, error) {
+	fullURL, err := baseURL.Parse(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse URL: %w", err)
+		return nil, err
 	}
 
 	params := url.Values{}
@@ -171,7 +174,7 @@ func (c *Client) buildURL(path string, query any) (*url.URL, error) {
 		} else {
 			params, err = querypkg.Values(query)
 			if err != nil {
-				return nil, fmt.Errorf("failed to encode query: %w", err)
+				return nil, err
 			}
 		}
 	}
@@ -184,20 +187,10 @@ func (c *Client) buildURL(path string, query any) (*url.URL, error) {
 	return fullURL, nil
 }
 
-// getJSON is used internally to avoid repetitive code when making GET requests that return JSON data.
-func getJSON[T any](ctx context.Context, c *Client, path string, query any) (*T, error) {
+// TODO: Remove when generic types on methods are supported in Go 1.27
+func getJSON[T any](ctx context.Context, c *Client, path string, query any) (T, error) {
 	var out T
-	if err := c.fetch(ctx, http.MethodGet, path, query, nil, &out); err != nil {
-		return nil, err
-	}
-
-	return &out, nil
-}
-
-// getJSONSlice is used internally to avoid repetitive code when making GET requests that return JSON slice data.
-func getJSONSlice[T any](ctx context.Context, c *Client, path string, query any) (T, error) {
-	var out T
-	err := c.fetch(ctx, http.MethodGet, path, query, nil, &out)
+	err := c.do(ctx, http.MethodGet, path, query, nil, &out)
 	return out, err
 }
 

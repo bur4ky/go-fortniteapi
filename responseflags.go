@@ -1,15 +1,15 @@
 package fortniteapi
 
-type ResponseFlag uint32
+type ResponseFlags uint32
 
 type ResponseFlagsParams struct {
-	ResponseFlags ResponseFlag `url:"responseFlags,omitempty"`
+	ResponseFlags ResponseFlags `url:"responseFlags,omitempty"`
 }
 
 const (
-	FlagIncludePaths ResponseFlag = 1 << iota
+	FlagNone ResponseFlags = 0
+
+	FlagIncludePaths ResponseFlags = 1 << (iota - 1)
 	FlagIncludeGameplayTags
 	FlagIncludeShopHistory
-
-	FlagAll = FlagIncludePaths | FlagIncludeGameplayTags | FlagIncludeShopHistory
 )

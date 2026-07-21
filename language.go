@@ -25,6 +25,6 @@ const (
 )
 
 type LanguageParams struct {
-	Language      Language     `url:"language,omitempty"`
-	ResponseFlags ResponseFlag `url:"responseFlags,omitempty"`
+	Language      Language      `url:"language,omitempty"`
+	ResponseFlags ResponseFlags `url:"responseFlags,omitempty"`
 }

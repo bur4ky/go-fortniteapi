@@ -9,15 +9,15 @@ import (
 )
 
 const (
-	testStatsName = "BurakYhs"
-	testStatsID   = "05006cb489c347beaad83551a1b9544e"
+	statsName = "BurakYhs"
+	statsID   = "05006cb489c347beaad83551a1b9544e"
 )
 
 func TestStats_BRByName(t *testing.T) {
 	t.Parallel()
 	requireAPIKey(t)
 
-	_, err := client.Stats.BRByName(context.Background(), testStatsName, nil)
+	_, err := client.Stats.BRByName(context.Background(), statsName, nil)
 	require.NoError(t, err)
 }
 
@@ -25,9 +25,9 @@ func TestStats_BRByID(t *testing.T) {
 	t.Parallel()
 	requireAPIKey(t)
 
-	resp, err := client.Stats.BRByID(context.Background(), testStatsID, nil)
+	resp, err := client.Stats.BRByID(context.Background(), statsID, nil)
 	require.NoError(t, err)
-	require.Equal(t, testStatsID, resp.Account.ID)
+	require.Equal(t, statsID, resp.Account.ID)
 }
 
 func requireAPIKey(t *testing.T) {

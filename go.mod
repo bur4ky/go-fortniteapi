@@ -1,10 +1,11 @@
 module github.com/bur4ky/go-fortniteapi
 
-go 1.25
+go 1.26.0
 
 require (
 	github.com/google/go-querystring v1.2.0
 	github.com/stretchr/testify v1.11.1
+	golang.org/x/time v0.15.0
 )
 
 require (

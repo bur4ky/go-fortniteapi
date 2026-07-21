@@ -78,31 +78,31 @@ type ShopItemNewDisplayAsset struct {
 }
 
 type ShopItem struct {
-	RegularPrice           int                     `json:"regularPrice"`
-	FinalPrice             int                     `json:"finalPrice"`
-	DevName                string                  `json:"devName"`
-	OfferID                string                  `json:"offerId"`
-	InDate                 time.Time               `json:"inDate"`
-	OutDate                time.Time               `json:"outDate"`
-	Bundle                 ShopItemBundle          `json:"bundle,omitzero"`
-	Banner                 ShopItemBanner          `json:"banner,omitzero"`
-	OfferTag               ShopItemOfferTag        `json:"offerTag,omitzero"`
-	Giftable               bool                    `json:"giftable"`
-	Refundable             bool                    `json:"refundable"`
-	SortPriority           int                     `json:"sortPriority"`
-	LayoutID               string                  `json:"layoutId"`
-	Layout                 ShopItemLayout          `json:"layout"`
-	Colors                 ShopItemColors          `json:"colors"`
-	TileBackgroundMaterial string                  `json:"tileBackgroundMaterial"`
-	TileSize               string                  `json:"tileSize"`
-	DisplayAssetPath       string                  `json:"displayAssetPath"`
-	NewDisplayAssetPath    string                  `json:"newDisplayAssetPath"`
-	NewDisplayAsset        ShopItemNewDisplayAsset `json:"newDisplayAsset"`
-	BRItems                []BRCosmetic            `json:"brItems,omitempty"`
-	Tracks                 []Track                 `json:"tracks,omitempty"`
-	Instruments            []Instrument            `json:"instruments,omitempty"`
-	Cars                   []Car                   `json:"cars,omitempty"`
-	LegoKits               []LegoKit               `json:"legoKits,omitempty"`
+	RegularPrice           int                      `json:"regularPrice"`
+	FinalPrice             int                      `json:"finalPrice"`
+	DevName                string                   `json:"devName"`
+	OfferID                string                   `json:"offerId"`
+	InDate                 time.Time                `json:"inDate"`
+	OutDate                time.Time                `json:"outDate"`
+	Bundle                 *ShopItemBundle          `json:"bundle,omitempty"`
+	Banner                 *ShopItemBanner          `json:"banner,omitempty"`
+	OfferTag               *ShopItemOfferTag        `json:"offerTag,omitempty"`
+	Giftable               bool                     `json:"giftable"`
+	Refundable             bool                     `json:"refundable"`
+	SortPriority           int                      `json:"sortPriority"`
+	LayoutID               string                   `json:"layoutId"`
+	Layout                 ShopItemLayout           `json:"layout"`
+	Colors                 ShopItemColors           `json:"colors"`
+	TileBackgroundMaterial string                   `json:"tileBackgroundMaterial"`
+	TileSize               string                   `json:"tileSize"`
+	DisplayAssetPath       string                   `json:"displayAssetPath"`
+	NewDisplayAssetPath    string                   `json:"newDisplayAssetPath"`
+	NewDisplayAsset        *ShopItemNewDisplayAsset `json:"newDisplayAsset,omitempty"`
+	BRItems                []BRCosmetic             `json:"brItems,omitempty"`
+	Tracks                 []Track                  `json:"tracks,omitempty"`
+	Instruments            []Instrument             `json:"instruments,omitempty"`
+	Cars                   []Car                    `json:"cars,omitempty"`
+	LegoKits               []LegoKit                `json:"legoKits,omitempty"`
 }
 
 type ShopResponse struct {
@@ -117,5 +117,5 @@ type ShopService struct {
 }
 
 func (s *ShopService) Get(ctx context.Context, params *ShopParams) (*ShopResponse, error) {
-	return getJSON[ShopResponse](ctx, s.client, "/v2/shop", params)
+	return getJSON[*ShopResponse](ctx, s.client, "/v2/shop", params)
 }

@@ -62,12 +62,12 @@ type BRCosmeticBeanImages struct {
 }
 
 type BRCosmeticImages struct {
-	SmallIcon string               `json:"smallIcon,omitempty"`
-	Icon      string               `json:"icon,omitempty"`
-	Featured  string               `json:"featured,omitempty"`
-	Lego      BRCosmeticLegoImages `json:"lego,omitzero"`
-	Bean      BRCosmeticBeanImages `json:"bean,omitzero"`
-	Other     map[string]string    `json:"Other,omitzero"`
+	SmallIcon string                `json:"smallIcon,omitempty"`
+	Icon      string                `json:"icon,omitempty"`
+	Featured  string                `json:"featured,omitempty"`
+	Lego      *BRCosmeticLegoImages `json:"lego,omitempty"`
+	Bean      *BRCosmeticBeanImages `json:"bean,omitempty"`
+	Other     map[string]string     `json:"Other,omitzero"`
 }
 
 type BRCosmeticVariantOption struct {
@@ -92,12 +92,12 @@ type BRCosmetic struct {
 	CustomExclusiveCallout string                  `json:"customExclusiveCallout,omitempty"`
 	Type                   BRCosmeticType          `json:"type"`
 	Rarity                 BRCosmeticRarity        `json:"rarity"`
-	Series                 BRCosmeticSeries        `json:"series,omitzero"`
-	Set                    BRCosmeticSet           `json:"set,omitzero"`
+	Series                 *BRCosmeticSeries       `json:"series,omitempty"`
+	Set                    *BRCosmeticSet          `json:"set,omitempty"`
 	Introduction           BRCosmeticIntroduction  `json:"introduction"`
 	Images                 BRCosmeticImages        `json:"images"`
-	Variants               []BRCosmeticItemVariant `json:"variants,omitzero"`
-	BuiltInEmoteIDs        []string                `json:"builtInEmoteIds,omitzero"`
+	Variants               []BRCosmeticItemVariant `json:"variants,omitempty"`
+	BuiltInEmoteIDs        []string                `json:"builtInEmoteIds,omitempty"`
 	SearchTags             []string                `json:"searchTags,omitempty"`
 	GameplayTags           []string                `json:"gameplayTags,omitempty"`
 	MetaTags               []string                `json:"metaTags,omitempty"`
@@ -133,7 +133,7 @@ type Track struct {
 	GameplayTags []string        `json:"gameplayTags,omitempty"`
 	Genres       []string        `json:"genres"`
 	AlbumArt     string          `json:"albumArt"`
-	Added        time.Time       `json:"added,omitempty"`
+	Added        time.Time       `json:"added,omitzero"`
 	ShopHistory  []string        `json:"shopHistory,omitempty"`
 }
 
@@ -143,18 +143,18 @@ type InstrumentImages struct {
 }
 
 type Instrument struct {
-	ID            string           `json:"id"`
-	Name          string           `json:"name"`
-	Description   string           `json:"description"`
-	Type          BRCosmeticType   `json:"type"`
-	Rarity        BRCosmeticRarity `json:"rarity"`
-	Images        InstrumentImages `json:"images"`
-	Series        BRCosmeticSeries `json:"series,omitzero"`
-	GameplayTags  []string         `json:"gameplayTags,omitempty"`
-	Path          string           `json:"path"`
-	ShowcaseVideo string           `json:"showcaseVideo"`
-	Added         time.Time        `json:"added"`
-	ShopHistory   []string         `json:"shopHistory,omitempty"`
+	ID            string            `json:"id"`
+	Name          string            `json:"name"`
+	Description   string            `json:"description"`
+	Type          BRCosmeticType    `json:"type"`
+	Rarity        BRCosmeticRarity  `json:"rarity"`
+	Images        InstrumentImages  `json:"images"`
+	Series        *BRCosmeticSeries `json:"series,omitempty"`
+	GameplayTags  []string          `json:"gameplayTags,omitempty"`
+	Path          string            `json:"path"`
+	ShowcaseVideo string            `json:"showcaseVideo"`
+	Added         time.Time         `json:"added"`
+	ShopHistory   []string          `json:"shopHistory,omitempty"`
 }
 
 type CarImages struct {
@@ -163,19 +163,19 @@ type CarImages struct {
 }
 
 type Car struct {
-	ID            string           `json:"id"`
-	VehicleID     string           `json:"vehicleId"`
-	Name          string           `json:"name"`
-	Description   string           `json:"description"`
-	Type          BRCosmeticType   `json:"type"`
-	Rarity        BRCosmeticRarity `json:"rarity"`
-	Images        CarImages        `json:"images"`
-	Series        BRCosmeticSeries `json:"series,omitzero"`
-	GameplayTags  []string         `json:"gameplayTags,omitempty"`
-	Path          string           `json:"path,omitempty"`
-	ShowcaseVideo string           `json:"showcaseVideo"`
-	Added         time.Time        `json:"added"`
-	ShopHistory   []string         `json:"shopHistory,omitempty"`
+	ID            string            `json:"id"`
+	VehicleID     string            `json:"vehicleId"`
+	Name          string            `json:"name"`
+	Description   string            `json:"description"`
+	Type          BRCosmeticType    `json:"type"`
+	Rarity        BRCosmeticRarity  `json:"rarity"`
+	Images        CarImages         `json:"images"`
+	Series        *BRCosmeticSeries `json:"series,omitempty"`
+	GameplayTags  []string          `json:"gameplayTags,omitempty"`
+	Path          string            `json:"path,omitempty"`
+	ShowcaseVideo string            `json:"showcaseVideo"`
+	Added         time.Time         `json:"added"`
+	ShopHistory   []string          `json:"shopHistory,omitempty"`
 }
 
 type LegoImages struct {
@@ -200,15 +200,15 @@ type LegoKitsImages struct {
 }
 
 type LegoKit struct {
-	ID           string           `json:"id"`
-	Name         string           `json:"name"`
-	Type         BRCosmeticType   `json:"type"`
-	Series       BRCosmeticSeries `json:"series,omitzero"`
-	GameplayTags []string         `json:"gameplayTags,omitempty"`
-	Images       LegoKitsImages   `json:"images"`
-	Path         string           `json:"path,omitempty"`
-	Added        time.Time        `json:"added"`
-	ShopHistory  []string         `json:"shopHistory,omitempty"`
+	ID           string            `json:"id"`
+	Name         string            `json:"name"`
+	Type         BRCosmeticType    `json:"type"`
+	Series       *BRCosmeticSeries `json:"series,omitempty"`
+	GameplayTags []string          `json:"gameplayTags,omitempty"`
+	Images       LegoKitsImages    `json:"images"`
+	Path         string            `json:"path,omitempty"`
+	Added        time.Time         `json:"added"`
+	ShopHistory  []string          `json:"shopHistory,omitempty"`
 }
 
 type BeanImages struct {
@@ -330,7 +330,7 @@ type SearchBRCosmeticParams struct {
 	AddedSince          int64             `url:"addedSince,omitempty"`
 	UnseenFor           int               `url:"unseenFor,omitempty"`
 	LastAppearance      int64             `url:"lastAppearance,omitempty"`
-	ResponseFlags       ResponseFlag      `url:"responseFlags,omitempty"`
+	ResponseFlags       ResponseFlags     `url:"responseFlags,omitempty"`
 }
 
 type SearchBRCosmeticResponse BRCosmetic
@@ -346,39 +346,39 @@ type CosmeticsService struct {
 }
 
 func (s *CosmeticsService) All(ctx context.Context, params *AllCosmeticsParams) (*AllCosmeticsResponse, error) {
-	return getJSON[AllCosmeticsResponse](ctx, s.client, "/v2/cosmetics", params)
+	return getJSON[*AllCosmeticsResponse](ctx, s.client, "/v2/cosmetics", params)
 }
 
 func (s *CosmeticsService) New(ctx context.Context, params *NewCosmeticsParams) (*NewCosmeticsResponse, error) {
-	return getJSON[NewCosmeticsResponse](ctx, s.client, "/v2/cosmetics/new", params)
+	return getJSON[*NewCosmeticsResponse](ctx, s.client, "/v2/cosmetics/new", params)
 }
 
 func (s *CosmeticsService) BRCosmeticsAll(ctx context.Context, params *BRCosmeticsAllParams) (BRCosmeticsAllResponse, error) {
-	return getJSONSlice[BRCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/br", params)
+	return getJSON[BRCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/br", params)
 }
 
 func (s *CosmeticsService) TrackCosmeticsAll(ctx context.Context, params *TrackCosmeticsAllParams) (TrackCosmeticsAllResponse, error) {
-	return getJSONSlice[TrackCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/tracks", params)
+	return getJSON[TrackCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/tracks", params)
 }
 
 func (s *CosmeticsService) InstrumentCosmeticsAll(ctx context.Context, params *InstrumentCosmeticsAllParams) (InstrumentCosmeticsAllResponse, error) {
-	return getJSONSlice[InstrumentCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/instruments", params)
+	return getJSON[InstrumentCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/instruments", params)
 }
 
 func (s *CosmeticsService) CarCosmeticsAll(ctx context.Context, params *CarCosmeticsAllParams) (CarCosmeticsAllResponse, error) {
-	return getJSONSlice[CarCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/cars", params)
+	return getJSON[CarCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/cars", params)
 }
 
 func (s *CosmeticsService) LegoCosmeticsAll(ctx context.Context, params *LegoCosmeticsAllParams) (LegoCosmeticsAllResponse, error) {
-	return getJSONSlice[LegoCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/lego", params)
+	return getJSON[LegoCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/lego", params)
 }
 
 func (s *CosmeticsService) LegoKitCosmeticsAll(ctx context.Context, params *LegoKitCosmeticsAllParams) (LegoKitCosmeticsAllResponse, error) {
-	return getJSONSlice[LegoKitCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/lego/kits", params)
+	return getJSON[LegoKitCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/lego/kits", params)
 }
 
 func (s *CosmeticsService) BeanCosmeticsAll(ctx context.Context, params *BeanCosmeticsAllParams) (BeanCosmeticsAllResponse, error) {
-	return getJSONSlice[BeanCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/beans", params)
+	return getJSON[BeanCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/beans", params)
 }
 
 func (s *CosmeticsService) BRCosmeticByID(ctx context.Context, id string, params *BRCosmeticByIDParams) (*BRCosmeticByIDResponse, error) {
@@ -386,31 +386,31 @@ func (s *CosmeticsService) BRCosmeticByID(ctx context.Context, id string, params
 		return nil, emptyParamErr("id")
 	}
 
-	return getJSON[BRCosmeticByIDResponse](ctx, s.client, "/v2/cosmetics/br/"+id, params)
+	return getJSON[*BRCosmeticByIDResponse](ctx, s.client, "/v2/cosmetics/br/"+id, params)
 }
 
 func (s *CosmeticsService) SearchBRCosmetic(ctx context.Context, params *SearchBRCosmeticParams) (*SearchBRCosmeticResponse, error) {
-	if params == nil {
-		params = &SearchBRCosmeticParams{}
-	}
-
 	if params.SearchLanguage == "" {
+		if params == nil {
+			params = &SearchBRCosmeticParams{}
+		}
+
 		params.SearchLanguage = s.client.language
 	}
 
-	return getJSON[SearchBRCosmeticResponse](ctx, s.client, "/v2/cosmetics/br/search", params)
+	return getJSON[*SearchBRCosmeticResponse](ctx, s.client, "/v2/cosmetics/br/search", params)
 }
 
 func (s *CosmeticsService) SearchBRCosmetics(ctx context.Context, params *SearchBRCosmeticsParams) (SearchBRCosmeticsResponse, error) {
-	if params == nil {
-		params = &SearchBRCosmeticsParams{}
-	}
-
 	if params.SearchLanguage == "" {
+		if params == nil {
+			params = &SearchBRCosmeticsParams{}
+		}
+
 		params.SearchLanguage = s.client.language
 	}
 
-	return getJSONSlice[SearchBRCosmeticsResponse](ctx, s.client, "/v2/cosmetics/br/search/all", params)
+	return getJSON[SearchBRCosmeticsResponse](ctx, s.client, "/v2/cosmetics/br/search/all", params)
 }
 
 func (s *CosmeticsService) SearchBRCosmeticsByIDs(ctx context.Context, ids []string, params *BRCosmeticsSearchByIDsParams) (BRCosmeticsSearchByIDsResponse, error) {
@@ -419,6 +419,6 @@ func (s *CosmeticsService) SearchBRCosmeticsByIDs(ctx context.Context, ids []str
 	}
 
 	var out BRCosmeticsSearchByIDsResponse
-	err := s.client.fetch(ctx, http.MethodPost, "/v2/cosmetics/br/search/ids", params, ids, &out)
+	err := s.client.do(ctx, http.MethodPost, "/v2/cosmetics/br/search/ids", params, ids, &out)
 	return out, err
 }
