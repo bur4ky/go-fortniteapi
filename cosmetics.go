@@ -67,13 +67,13 @@ type BRCosmeticImages struct {
 	Featured  string                `json:"featured,omitempty"`
 	Lego      *BRCosmeticLegoImages `json:"lego,omitempty"`
 	Bean      *BRCosmeticBeanImages `json:"bean,omitempty"`
-	Other     map[string]string     `json:"Other,omitzero"`
+	Other     map[string]string     `json:"other,omitempty"`
 }
 
 type BRCosmeticVariantOption struct {
 	Tag                string `json:"tag"`
 	Name               string `json:"name"`
-	UnlockRequirements string `json:"unlockRequirements"`
+	UnlockRequirements string `json:"unlockRequirements,omitempty"`
 	Image              string `json:"image"`
 }
 
@@ -101,7 +101,7 @@ type BRCosmetic struct {
 	SearchTags             []string                `json:"searchTags,omitempty"`
 	GameplayTags           []string                `json:"gameplayTags,omitempty"`
 	MetaTags               []string                `json:"metaTags,omitempty"`
-	ShowcaseVideo          string                  `json:"showcaseVideo"`
+	ShowcaseVideo          string                  `json:"showcaseVideo,omitempty"`
 	DynamicPakID           string                  `json:"dynamicPakId,omitempty"`
 	ItemPreviewHeroPath    string                  `json:"itemPreviewHeroPath,omitempty"`
 	DisplayAssetPath       string                  `json:"displayAssetPath,omitempty"`
@@ -125,15 +125,15 @@ type Track struct {
 	DevName      string          `json:"devName"`
 	Title        string          `json:"title"`
 	Artist       string          `json:"artist"`
-	Album        string          `json:"album"`
+	Album        string          `json:"album,omitempty"`
 	ReleaseYear  int             `json:"releaseYear"`
 	BPM          int             `json:"bpm"`
 	Duration     int             `json:"duration"`
 	Difficulty   TrackDifficulty `json:"difficulty"`
 	GameplayTags []string        `json:"gameplayTags,omitempty"`
-	Genres       []string        `json:"genres"`
+	Genres       []string        `json:"genres,omitempty"`
 	AlbumArt     string          `json:"albumArt"`
-	Added        time.Time       `json:"added,omitzero"`
+	Added        time.Time       `json:"added"`
 	ShopHistory  []string        `json:"shopHistory,omitempty"`
 }
 
@@ -152,7 +152,7 @@ type Instrument struct {
 	Series        *BRCosmeticSeries `json:"series,omitempty"`
 	GameplayTags  []string          `json:"gameplayTags,omitempty"`
 	Path          string            `json:"path"`
-	ShowcaseVideo string            `json:"showcaseVideo"`
+	ShowcaseVideo string            `json:"showcaseVideo,omitempty"`
 	Added         time.Time         `json:"added"`
 	ShopHistory   []string          `json:"shopHistory,omitempty"`
 }
@@ -173,7 +173,7 @@ type Car struct {
 	Series        *BRCosmeticSeries `json:"series,omitempty"`
 	GameplayTags  []string          `json:"gameplayTags,omitempty"`
 	Path          string            `json:"path,omitempty"`
-	ShowcaseVideo string            `json:"showcaseVideo"`
+	ShowcaseVideo string            `json:"showcaseVideo,omitempty"`
 	Added         time.Time         `json:"added"`
 	ShopHistory   []string          `json:"shopHistory,omitempty"`
 }
@@ -270,29 +270,14 @@ type NewCosmeticsResponse struct {
 	Items         AllCosmeticsResponse      `json:"items"`
 }
 
-type BRCosmeticsAllParams LanguageParams
-type BRCosmeticsAllResponse []BRCosmetic
-
-type TrackCosmeticsAllParams ResponseFlagsParams
-type TrackCosmeticsAllResponse []Track
-
-type InstrumentCosmeticsAllParams LanguageParams
-type InstrumentCosmeticsAllResponse []Instrument
-
-type CarCosmeticsAllParams LanguageParams
-type CarCosmeticsAllResponse []Car
-
-type LegoCosmeticsAllParams ResponseFlagsParams
-type LegoCosmeticsAllResponse []Lego
-
-type LegoKitCosmeticsAllParams LanguageParams
-type LegoKitCosmeticsAllResponse []LegoKit
-
-type BeanCosmeticsAllParams LanguageParams
-type BeanCosmeticsAllResponse []Bean
-
+type AllBRCosmeticsParams LanguageParams
+type AllTracksParams ResponseFlagsParams
+type AllInstrumentsParams LanguageParams
+type AllCarsParams LanguageParams
+type AllLegoParams ResponseFlagsParams
+type AllLegoKitsParams LanguageParams
+type AllBeansParams LanguageParams
 type BRCosmeticByIDParams LanguageParams
-type BRCosmeticByIDResponse BRCosmetic
 
 type SearchBRCosmeticParams struct {
 	Language            Language          `url:"language,omitempty"`
@@ -333,13 +318,8 @@ type SearchBRCosmeticParams struct {
 	ResponseFlags       ResponseFlags     `url:"responseFlags,omitempty"`
 }
 
-type SearchBRCosmeticResponse BRCosmetic
-
 type SearchBRCosmeticsParams SearchBRCosmeticParams
-type SearchBRCosmeticsResponse []SearchBRCosmeticResponse
-
 type BRCosmeticsSearchByIDsParams LanguageParams
-type BRCosmeticsSearchByIDsResponse []BRCosmetic
 
 type CosmeticsService struct {
 	client *Client
@@ -353,43 +333,43 @@ func (s *CosmeticsService) New(ctx context.Context, params *NewCosmeticsParams) 
 	return getJSON[*NewCosmeticsResponse](ctx, s.client, "/v2/cosmetics/new", params)
 }
 
-func (s *CosmeticsService) BRCosmeticsAll(ctx context.Context, params *BRCosmeticsAllParams) (BRCosmeticsAllResponse, error) {
-	return getJSON[BRCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/br", params)
+func (s *CosmeticsService) AllBRCosmetics(ctx context.Context, params *AllBRCosmeticsParams) ([]BRCosmetic, error) {
+	return getJSON[[]BRCosmetic](ctx, s.client, "/v2/cosmetics/br", params)
 }
 
-func (s *CosmeticsService) TrackCosmeticsAll(ctx context.Context, params *TrackCosmeticsAllParams) (TrackCosmeticsAllResponse, error) {
-	return getJSON[TrackCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/tracks", params)
+func (s *CosmeticsService) AllTracks(ctx context.Context, params *AllTracksParams) ([]Track, error) {
+	return getJSON[[]Track](ctx, s.client, "/v2/cosmetics/tracks", params)
 }
 
-func (s *CosmeticsService) InstrumentCosmeticsAll(ctx context.Context, params *InstrumentCosmeticsAllParams) (InstrumentCosmeticsAllResponse, error) {
-	return getJSON[InstrumentCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/instruments", params)
+func (s *CosmeticsService) AllInstruments(ctx context.Context, params *AllInstrumentsParams) ([]Instrument, error) {
+	return getJSON[[]Instrument](ctx, s.client, "/v2/cosmetics/instruments", params)
 }
 
-func (s *CosmeticsService) CarCosmeticsAll(ctx context.Context, params *CarCosmeticsAllParams) (CarCosmeticsAllResponse, error) {
-	return getJSON[CarCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/cars", params)
+func (s *CosmeticsService) AllCars(ctx context.Context, params *AllCarsParams) ([]Car, error) {
+	return getJSON[[]Car](ctx, s.client, "/v2/cosmetics/cars", params)
 }
 
-func (s *CosmeticsService) LegoCosmeticsAll(ctx context.Context, params *LegoCosmeticsAllParams) (LegoCosmeticsAllResponse, error) {
-	return getJSON[LegoCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/lego", params)
+func (s *CosmeticsService) AllLego(ctx context.Context, params *AllLegoParams) ([]Lego, error) {
+	return getJSON[[]Lego](ctx, s.client, "/v2/cosmetics/lego", params)
 }
 
-func (s *CosmeticsService) LegoKitCosmeticsAll(ctx context.Context, params *LegoKitCosmeticsAllParams) (LegoKitCosmeticsAllResponse, error) {
-	return getJSON[LegoKitCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/lego/kits", params)
+func (s *CosmeticsService) AllLegoKits(ctx context.Context, params *AllLegoKitsParams) ([]LegoKit, error) {
+	return getJSON[[]LegoKit](ctx, s.client, "/v2/cosmetics/lego/kits", params)
 }
 
-func (s *CosmeticsService) BeanCosmeticsAll(ctx context.Context, params *BeanCosmeticsAllParams) (BeanCosmeticsAllResponse, error) {
-	return getJSON[BeanCosmeticsAllResponse](ctx, s.client, "/v2/cosmetics/beans", params)
+func (s *CosmeticsService) AllBeans(ctx context.Context, params *AllBeansParams) ([]Bean, error) {
+	return getJSON[[]Bean](ctx, s.client, "/v2/cosmetics/beans", params)
 }
 
-func (s *CosmeticsService) BRCosmeticByID(ctx context.Context, id string, params *BRCosmeticByIDParams) (*BRCosmeticByIDResponse, error) {
+func (s *CosmeticsService) BRCosmeticByID(ctx context.Context, id string, params *BRCosmeticByIDParams) (*BRCosmetic, error) {
 	if id == "" {
 		return nil, emptyParamErr("id")
 	}
 
-	return getJSON[*BRCosmeticByIDResponse](ctx, s.client, "/v2/cosmetics/br/"+id, params)
+	return getJSON[*BRCosmetic](ctx, s.client, "/v2/cosmetics/br/"+id, params)
 }
 
-func (s *CosmeticsService) SearchBRCosmetic(ctx context.Context, params *SearchBRCosmeticParams) (*SearchBRCosmeticResponse, error) {
+func (s *CosmeticsService) SearchBRCosmetic(ctx context.Context, params *SearchBRCosmeticParams) (*BRCosmetic, error) {
 	if params.SearchLanguage == "" {
 		if params == nil {
 			params = &SearchBRCosmeticParams{}
@@ -398,10 +378,10 @@ func (s *CosmeticsService) SearchBRCosmetic(ctx context.Context, params *SearchB
 		params.SearchLanguage = s.client.language
 	}
 
-	return getJSON[*SearchBRCosmeticResponse](ctx, s.client, "/v2/cosmetics/br/search", params)
+	return getJSON[*BRCosmetic](ctx, s.client, "/v2/cosmetics/br/search", params)
 }
 
-func (s *CosmeticsService) SearchBRCosmetics(ctx context.Context, params *SearchBRCosmeticsParams) (SearchBRCosmeticsResponse, error) {
+func (s *CosmeticsService) SearchBRCosmetics(ctx context.Context, params *SearchBRCosmeticsParams) ([]BRCosmetic, error) {
 	if params.SearchLanguage == "" {
 		if params == nil {
 			params = &SearchBRCosmeticsParams{}
@@ -410,15 +390,15 @@ func (s *CosmeticsService) SearchBRCosmetics(ctx context.Context, params *Search
 		params.SearchLanguage = s.client.language
 	}
 
-	return getJSON[SearchBRCosmeticsResponse](ctx, s.client, "/v2/cosmetics/br/search/all", params)
+	return getJSON[[]BRCosmetic](ctx, s.client, "/v2/cosmetics/br/search/all", params)
 }
 
-func (s *CosmeticsService) SearchBRCosmeticsByIDs(ctx context.Context, ids []string, params *BRCosmeticsSearchByIDsParams) (BRCosmeticsSearchByIDsResponse, error) {
+func (s *CosmeticsService) SearchBRCosmeticsByIDs(ctx context.Context, ids []string, params *BRCosmeticsSearchByIDsParams) ([]BRCosmetic, error) {
 	if len(ids) == 0 {
 		return nil, emptyParamErr("ids")
 	}
 
-	var out BRCosmeticsSearchByIDsResponse
+	var out []BRCosmetic
 	err := s.client.do(ctx, http.MethodPost, "/v2/cosmetics/br/search/ids", params, ids, &out)
 	return out, err
 }

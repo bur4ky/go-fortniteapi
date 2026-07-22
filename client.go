@@ -17,29 +17,28 @@ import (
 const version = "v1.0.0"
 
 var (
-	baseURL, _ = url.Parse("https://fortnite-api.com")
-
 	ErrMissingAPIKey  = fmt.Errorf("missing API key")
 	ErrInvalidAPIKey  = fmt.Errorf("invalid API key")
 	ErrEmptyParameter = fmt.Errorf("missing required parameter")
 )
 
-type APIResponse[T any] struct {
+type Response[T any] struct {
 	Status int `json:"status"`
 	Data   T   `json:"data"`
 }
 
-type APIError struct {
+type Error struct {
 	Status  int    `json:"status"`
 	Message string `json:"error"`
 }
 
-func (e *APIError) Error() string {
+func (e *Error) Error() string {
 	return fmt.Sprintf("api error: %d - %s", e.Status, e.Message)
 }
 
 type Client struct {
 	http     *http.Client
+	baseURL  *url.URL
 	apiKey   string
 	language Language
 
@@ -54,7 +53,7 @@ type Client struct {
 	Stats       *StatsService
 }
 
-func New(language Language, apiKey string) *Client {
+func NewClient(language Language, apiKey string) *Client {
 	return NewWithClient(language, apiKey, nil)
 }
 
@@ -73,6 +72,7 @@ func NewWithClient(language Language, apiKey string, client *http.Client) *Clien
 		language: language,
 	}
 
+	c.baseURL, _ = url.Parse("https://fortnite-api.com")
 	c.AES = &AESService{client: c}
 	c.Banners = &BannersService{client: c}
 	c.Cosmetics = &CosmeticsService{client: c}
@@ -109,7 +109,7 @@ func (c *Client) do(ctx context.Context, method, path string, query, body, out a
 	decoder := json.NewDecoder(response.Body)
 
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		var apiError *APIError
+		var apiError *Error
 		if err := decoder.Decode(apiError); err != nil {
 			return fmt.Errorf("decode error response: %w", err)
 		}
@@ -117,7 +117,7 @@ func (c *Client) do(ctx context.Context, method, path string, query, body, out a
 		return apiError
 	}
 
-	var apiResponse APIResponse[json.RawMessage]
+	var apiResponse Response[json.RawMessage]
 	if err := decoder.Decode(&apiResponse); err != nil {
 		return fmt.Errorf("decode response: %w", err)
 	}
@@ -162,20 +162,18 @@ func (c *Client) newRequest(ctx context.Context, method, urlStr string, body any
 }
 
 func (c *Client) fullURL(path string, query any) (*url.URL, error) {
-	fullURL, err := baseURL.Parse(path)
+	fullURL, err := c.baseURL.Parse(path)
 	if err != nil {
 		return nil, err
 	}
 
 	params := url.Values{}
-	if query != nil {
-		if values, ok := query.(url.Values); ok {
-			params = values
-		} else {
-			params, err = querypkg.Values(query)
-			if err != nil {
-				return nil, err
-			}
+	if values, ok := query.(url.Values); ok {
+		params = values
+	} else if query != nil {
+		params, err = querypkg.Values(query)
+		if err != nil {
+			return nil, err
 		}
 	}
 

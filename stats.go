@@ -124,10 +124,6 @@ func (s *StatsService) SetLimiter(rl *rate.Limiter) {
 }
 
 func (s *StatsService) BRByName(ctx context.Context, name string, params *BRStatsByNameParams) (*BRStatsResponse, error) {
-	if err := s.limiter.Wait(ctx); err != nil {
-		return nil, err
-	}
-
 	if s.client.apiKey == "" {
 		return nil, ErrMissingAPIKey
 	}
@@ -141,20 +137,25 @@ func (s *StatsService) BRByName(ctx context.Context, name string, params *BRStat
 	}
 
 	params.Name = name
-	return getJSON[*BRStatsResponse](ctx, s.client, "/v2/stats/br/v2", params)
-}
 
-func (s *StatsService) BRByID(ctx context.Context, id string, params *BRStatsByIDParams) (*BRStatsResponse, error) {
 	if err := s.limiter.Wait(ctx); err != nil {
 		return nil, err
 	}
 
+	return getJSON[*BRStatsResponse](ctx, s.client, "/v2/stats/br/v2", params)
+}
+
+func (s *StatsService) BRByID(ctx context.Context, id string, params *BRStatsByIDParams) (*BRStatsResponse, error) {
 	if s.client.apiKey == "" {
 		return nil, ErrMissingAPIKey
 	}
 
 	if id == "" {
 		return nil, emptyParamErr("id")
+	}
+
+	if err := s.limiter.Wait(ctx); err != nil {
+		return nil, err
 	}
 
 	return getJSON[*BRStatsResponse](ctx, s.client, "/v2/stats/br/v2/"+id, params)

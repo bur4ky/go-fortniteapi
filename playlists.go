@@ -37,15 +37,14 @@ type Playlist struct {
 	Added                    time.Time       `json:"added"`
 }
 
-type PlaylistsResponse []Playlist
 type PlaylistByIDResponse Playlist
 
 type PlaylistsService struct {
 	client *Client
 }
 
-func (s *PlaylistsService) All(ctx context.Context, params *PlaylistsParams) (PlaylistsResponse, error) {
-	return getJSON[PlaylistsResponse](ctx, s.client, "/v1/playlists", params)
+func (s *PlaylistsService) All(ctx context.Context, params *PlaylistsParams) ([]Playlist, error) {
+	return getJSON[[]Playlist](ctx, s.client, "/v1/playlists", params)
 }
 
 func (s *PlaylistsService) ByID(ctx context.Context, id string, params *PlaylistByIDParams) (*PlaylistByIDResponse, error) {

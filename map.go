@@ -5,7 +5,7 @@ import "context"
 type BRMapParams LanguageParams
 type BRMapImages struct {
 	Blank string `json:"blank"`
-	Pois  string `json:"pois"`
+	POIs  string `json:"pois"`
 }
 
 type BRMapPOILocation struct {

@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAES_Keys(t *testing.T) {
+func TestAES_Key(t *testing.T) {
 	t.Parallel()
 
-	_, err := client.AES.Keys(context.Background(), nil)
+	_, err := client.AES.Key(context.Background(), nil)
 	require.NoError(t, err)
 }

@@ -15,7 +15,7 @@ const (
 	AESKeyFormatHex    AESKeyFormat = "hex"
 )
 
-type AESKeysParams struct {
+type AESKeyParams struct {
 	KeyFormat     AESKeyFormat  `url:"keyFormat"`
 	ResponseFlags ResponseFlags `url:"responseFlags,omitempty"`
 }
@@ -26,7 +26,7 @@ type AESDynamicKey struct {
 	Key         string `json:"key"`
 }
 
-type AESKeysResponse struct {
+type AESKeyResponse struct {
 	Build       string          `json:"build"`
 	MainKey     string          `json:"mainKey"`
 	DynamicKeys []AESDynamicKey `json:"dynamicKeys"`
@@ -37,6 +37,6 @@ type AESService struct {
 	client *Client
 }
 
-func (s *AESService) Keys(ctx context.Context, params *AESKeysParams) (*AESKeysResponse, error) {
-	return getJSON[*AESKeysResponse](ctx, s.client, "/v2/aes", params)
+func (s *AESService) Key(ctx context.Context, params *AESKeyParams) (*AESKeyResponse, error) {
+	return getJSON[*AESKeyResponse](ctx, s.client, "/v2/aes", params)
 }

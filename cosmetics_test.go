@@ -4,8 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/bur4ky/go-fortniteapi"
 	"github.com/stretchr/testify/require"
+
+	"github.com/bur4ky/go-fortniteapi"
 )
 
 const (
@@ -30,58 +31,58 @@ func TestCosmetics_New(t *testing.T) {
 	require.NotEmpty(t, resp)
 }
 
-func TestCosmetics_BRCosmeticsAll(t *testing.T) {
+func TestCosmetics_AllBRCosmetics(t *testing.T) {
 	t.Parallel()
 
-	resp, err := client.Cosmetics.BRCosmeticsAll(context.Background(), nil)
+	resp, err := client.Cosmetics.AllBRCosmetics(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, resp)
 }
 
-func TestCosmetics_TrackCosmeticsAll(t *testing.T) {
+func TestCosmetics_AllTracks(t *testing.T) {
 	t.Parallel()
 
-	resp, err := client.Cosmetics.TrackCosmeticsAll(context.Background(), nil)
+	resp, err := client.Cosmetics.AllTracks(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, resp)
 }
 
-func TestCosmetics_InstrumentCosmeticsAll(t *testing.T) {
+func TestCosmetics_AllInstruments(t *testing.T) {
 	t.Parallel()
 
-	resp, err := client.Cosmetics.InstrumentCosmeticsAll(context.Background(), nil)
+	resp, err := client.Cosmetics.AllInstruments(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, resp)
 }
 
-func TestCosmetics_CarCosmeticsAll(t *testing.T) {
+func TestCosmetics_AllCars(t *testing.T) {
 	t.Parallel()
 
-	resp, err := client.Cosmetics.CarCosmeticsAll(context.Background(), nil)
+	resp, err := client.Cosmetics.AllCars(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, resp)
 }
 
-func TestCosmetics_LegoCosmeticsAll(t *testing.T) {
+func TestCosmetics_AllLego(t *testing.T) {
 	t.Parallel()
 
-	resp, err := client.Cosmetics.LegoCosmeticsAll(context.Background(), nil)
+	resp, err := client.Cosmetics.AllLego(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, resp)
 }
 
-func TestCosmetics_LegoKitCosmeticsAll(t *testing.T) {
+func TestCosmetics_AllLegoKits(t *testing.T) {
 	t.Parallel()
 
-	resp, err := client.Cosmetics.LegoKitCosmeticsAll(context.Background(), nil)
+	resp, err := client.Cosmetics.AllLegoKits(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, resp)
 }
 
-func TestCosmetics_BeanCosmeticsAll(t *testing.T) {
+func TestCosmetics_AllBeans(t *testing.T) {
 	t.Parallel()
 
-	resp, err := client.Cosmetics.BeanCosmeticsAll(context.Background(), nil)
+	resp, err := client.Cosmetics.AllBeans(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, resp)
 }
