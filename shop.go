@@ -24,27 +24,24 @@ type ShopEntryOfferTag struct {
 	Text string `json:"text"`
 }
 
-type ShopEntryLayoutTextureMetadata struct {
+type ShopEntryLayoutMetadata struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
-type ShopEntryLayoutStringMetadata ShopEntryLayoutTextureMetadata
-type ShopEntryLayoutTextMetadata ShopEntryLayoutTextureMetadata
-
 type ShopEntryLayout struct {
-	ID                   string                           `json:"id"`
-	Name                 string                           `json:"name"`
-	Category             string                           `json:"category,omitempty"`
-	Index                int                              `json:"index"`
-	Rank                 int                              `json:"rank"`
-	ShowIneligibleOffers string                           `json:"showIneligibleOffers"`
-	Background           string                           `json:"background,omitempty"`
-	UseWidePreview       bool                             `json:"useWidePreview"`
-	DisplayType          string                           `json:"displayType"`
-	TextureMetadata      []ShopEntryLayoutTextureMetadata `json:"textureMetadata,omitempty"`
-	StringMetadata       []ShopEntryLayoutStringMetadata  `json:"stringMetadata,omitempty"`
-	TextMetadata         []ShopEntryLayoutTextMetadata    `json:"textMetadata,omitempty"`
+	ID                   string                    `json:"id"`
+	Name                 string                    `json:"name"`
+	Category             string                    `json:"category,omitempty"`
+	Index                int                       `json:"index"`
+	Rank                 int                       `json:"rank"`
+	ShowIneligibleOffers string                    `json:"showIneligibleOffers"`
+	Background           string                    `json:"background,omitempty"`
+	UseWidePreview       bool                      `json:"useWidePreview"`
+	DisplayType          string                    `json:"displayType"`
+	TextureMetadata      []ShopEntryLayoutMetadata `json:"textureMetadata,omitempty"`
+	StringMetadata       []ShopEntryLayoutMetadata `json:"stringMetadata,omitempty"`
+	TextMetadata         []ShopEntryLayoutMetadata `json:"textMetadata,omitempty"`
 }
 
 type ShopEntryColors struct {
@@ -53,6 +50,8 @@ type ShopEntryColors struct {
 	Color3              string `json:"color3,omitempty"`
 	TextBackgroundColor string `json:"textBackgroundColor,omitempty"`
 }
+
+// TODO: 40 chars long, might rename
 
 type ShopEntryNewDisplayAssetMaterialInstance struct {
 	ID          string            `json:"id"`

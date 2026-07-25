@@ -19,7 +19,7 @@ type Playlist struct {
 	SubName                  string          `json:"subName"`
 	Description              string          `json:"description"`
 	GameType                 string          `json:"gameType"`
-	RatingType               string          `json:"ratingType"`
+	RatingType               string          `json:"ratingType,omitempty"`
 	MinPlayers               int             `json:"minPlayers"`
 	MaxPlayers               int             `json:"maxPlayers"`
 	MaxTeams                 int             `json:"maxTeams"`
@@ -31,13 +31,11 @@ type Playlist struct {
 	IsLimitedTimeMode        bool            `json:"isLimitedTimeMode"`
 	IsLargeTeamGame          bool            `json:"isLargeTeamGame"`
 	AccumulateToProfileStats bool            `json:"accumulateToProfileStats"`
-	Images                   PlaylistsImages `json:"images"`
-	GameplayTags             []string        `json:"gameplayTags"`
+	Images                   PlaylistsImages `json:"images,omitzero"`
+	GameplayTags             []string        `json:"gameplayTags,omitempty"`
 	Path                     string          `json:"path"`
 	Added                    time.Time       `json:"added"`
 }
-
-type PlaylistByIDResponse Playlist
 
 type PlaylistsService struct {
 	client *Client
@@ -47,10 +45,10 @@ func (s *PlaylistsService) All(ctx context.Context, params *PlaylistsParams) ([]
 	return getJSON[[]Playlist](ctx, s.client, "/v1/playlists", params)
 }
 
-func (s *PlaylistsService) ByID(ctx context.Context, id string, params *PlaylistByIDParams) (*PlaylistByIDResponse, error) {
+func (s *PlaylistsService) ByID(ctx context.Context, id string, params *PlaylistByIDParams) (*Playlist, error) {
 	if id == "" {
 		return nil, emptyParamErr("id")
 	}
 
-	return getJSON[*PlaylistByIDResponse](ctx, s.client, "/v1/playlists/"+id, params)
+	return getJSON[*Playlist](ctx, s.client, "/v1/playlists/"+id, params)
 }

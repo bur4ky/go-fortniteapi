@@ -87,7 +87,7 @@ type BRStatsData struct {
 	LastModified    string  `json:"lastModified"`
 }
 
-type BRStatsModes struct {
+type BRModeStats struct {
 	Overall BRStatsData `json:"overall"`
 	Solo    BRStatsData `json:"solo"`
 	Duo     BRStatsData `json:"duo"`
@@ -96,22 +96,18 @@ type BRStatsModes struct {
 	LTM     BRStatsData `json:"ltm"`
 }
 
-type BRStatsAll BRStatsModes
-type BRStatsKeyboardMouse BRStatsModes
-type BRStatsGamepad BRStatsModes
-type BRStatsTouch BRStatsModes
-type BRStatsStats struct {
-	All           BRStatsAll           `json:"all"`
-	KeyboardMouse BRStatsKeyboardMouse `json:"keyboardMouse"`
-	Gamepad       BRStatsGamepad       `json:"gamepad"`
-	Touch         BRStatsTouch         `json:"touch"`
+type BRStatsPlatforms struct {
+	All           BRModeStats `json:"all"`
+	KeyboardMouse BRModeStats `json:"keyboardMouse"`
+	Gamepad       BRModeStats `json:"gamepad"`
+	Touch         BRModeStats `json:"touch"`
 }
 
 type BRStatsResponse struct {
 	Account    BRStatsAccount    `json:"account"`
 	BattlePass BRStatsBattlePass `json:"battlePass"`
-	Image      string            `json:"image"`
-	Stats      BRStatsStats      `json:"stats"`
+	Image      string            `json:"image,omitempty"`
+	Stats      BRStatsPlatforms  `json:"stats"`
 }
 
 type StatsService struct {

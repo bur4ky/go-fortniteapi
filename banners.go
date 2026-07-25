@@ -9,23 +9,18 @@ type BannerImages struct {
 	Icon      string `json:"icon"`
 }
 
-type BannerRarity BRCosmeticRarity
-type BannerSeries BRCosmeticSeries
-type BannerSet BRCosmeticSet
-type BannerIntroduction BRCosmeticIntroduction
-
 type Banner struct {
-	ID              string              `json:"id"`
-	DevName         string              `json:"devName"`
-	Name            string              `json:"name"`
-	Description     string              `json:"description"`
-	Category        string              `json:"category"`
-	FullUsageRights bool                `json:"fullUsageRights"`
-	Rarity          *BannerRarity       `json:"rarity,omitempty"`
-	Series          *BannerSeries       `json:"series,omitempty"`
-	Set             *BannerSet          `json:"set,omitempty"`
-	Introduction    *BannerIntroduction `json:"introduction,omitempty"`
-	Images          BannerImages        `json:"images"`
+	ID              string                `json:"id"`
+	DevName         string                `json:"devName"`
+	Name            string                `json:"name"`
+	Description     string                `json:"description"`
+	Category        string                `json:"category"`
+	FullUsageRights bool                  `json:"fullUsageRights"`
+	Rarity          *CosmeticRarity       `json:"rarity,omitempty"`
+	Series          *CosmeticSeries       `json:"series,omitempty"`
+	Set             *CosmeticSet          `json:"set,omitempty"`
+	Introduction    *CosmeticIntroduction `json:"introduction,omitempty"`
+	Images          BannerImages          `json:"images"`
 }
 
 type BannerColors struct {

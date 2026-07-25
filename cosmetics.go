@@ -18,32 +18,32 @@ const (
 	SearchMatchMethodEnds     SearchMatchMethod = "ends"
 )
 
-type BRCosmeticType struct {
+type CosmeticType struct {
 	Value        string `json:"value"`
 	DisplayValue string `json:"displayValue"`
 	BackendValue string `json:"backendValue"`
 }
 
-type BRCosmeticRarity struct {
+type CosmeticRarity struct {
 	Value        string `json:"value"`
 	DisplayValue string `json:"displayValue"`
 	BackendValue string `json:"backendValue"`
 }
 
-type BRCosmeticSeries struct {
+type CosmeticSeries struct {
 	Value        string   `json:"value"`
 	Image        string   `json:"image"`
 	Colors       []string `json:"colors"`
 	BackendValue string   `json:"backendValue"`
 }
 
-type BRCosmeticSet struct {
+type CosmeticSet struct {
 	Value        string `json:"value"`
 	Text         string `json:"text"`
 	BackendValue string `json:"backendValue"`
 }
 
-type BRCosmeticIntroduction struct {
+type CosmeticIntroduction struct {
 	Chapter      string `json:"chapter"`
 	Season       string `json:"season"`
 	Text         string `json:"text"`
@@ -77,38 +77,38 @@ type BRCosmeticVariantOption struct {
 	Image              string `json:"image"`
 }
 
-type BRCosmeticItemVariant struct {
+type BRCosmeticVariant struct {
 	Channel string                    `json:"channel"`
 	Type    string                    `json:"type"`
 	Options []BRCosmeticVariantOption `json:"options"`
 }
 
 type BRCosmetic struct {
-	ID                     string                  `json:"id"`
-	Name                   string                  `json:"name"`
-	Description            string                  `json:"description"`
-	ExclusiveDescription   string                  `json:"exclusiveDescription,omitempty"`
-	UnlockRequirements     string                  `json:"unlockRequirements,omitempty"`
-	CustomExclusiveCallout string                  `json:"customExclusiveCallout,omitempty"`
-	Type                   BRCosmeticType          `json:"type"`
-	Rarity                 BRCosmeticRarity        `json:"rarity"`
-	Series                 *BRCosmeticSeries       `json:"series,omitempty"`
-	Set                    *BRCosmeticSet          `json:"set,omitempty"`
-	Introduction           BRCosmeticIntroduction  `json:"introduction"`
-	Images                 BRCosmeticImages        `json:"images"`
-	Variants               []BRCosmeticItemVariant `json:"variants,omitempty"`
-	BuiltInEmoteIDs        []string                `json:"builtInEmoteIds,omitempty"`
-	SearchTags             []string                `json:"searchTags,omitempty"`
-	GameplayTags           []string                `json:"gameplayTags,omitempty"`
-	MetaTags               []string                `json:"metaTags,omitempty"`
-	ShowcaseVideo          string                  `json:"showcaseVideo,omitempty"`
-	DynamicPakID           string                  `json:"dynamicPakId,omitempty"`
-	ItemPreviewHeroPath    string                  `json:"itemPreviewHeroPath,omitempty"`
-	DisplayAssetPath       string                  `json:"displayAssetPath,omitempty"`
-	DefinitionPath         string                  `json:"definitionPath,omitempty"`
-	Path                   string                  `json:"path,omitempty"`
-	Added                  time.Time               `json:"added"`
-	ShopHistory            []string                `json:"shopHistory,omitempty"`
+	ID                     string               `json:"id"`
+	Name                   string               `json:"name"`
+	Description            string               `json:"description"`
+	ExclusiveDescription   string               `json:"exclusiveDescription,omitempty"`
+	UnlockRequirements     string               `json:"unlockRequirements,omitempty"`
+	CustomExclusiveCallout string               `json:"customExclusiveCallout,omitempty"`
+	Type                   CosmeticType         `json:"type"`
+	Rarity                 CosmeticRarity       `json:"rarity"`
+	Series                 *CosmeticSeries      `json:"series,omitempty"`
+	Set                    *CosmeticSet         `json:"set,omitempty"`
+	Introduction           CosmeticIntroduction `json:"introduction"`
+	Images                 BRCosmeticImages     `json:"images"`
+	Variants               []BRCosmeticVariant  `json:"variants,omitempty"`
+	BuiltInEmoteIDs        []string             `json:"builtInEmoteIds,omitempty"`
+	SearchTags             []string             `json:"searchTags,omitempty"`
+	GameplayTags           []string             `json:"gameplayTags,omitempty"`
+	MetaTags               []string             `json:"metaTags,omitempty"`
+	ShowcaseVideo          string               `json:"showcaseVideo,omitempty"`
+	DynamicPakID           string               `json:"dynamicPakId,omitempty"`
+	ItemPreviewHeroPath    string               `json:"itemPreviewHeroPath,omitempty"`
+	DisplayAssetPath       string               `json:"displayAssetPath,omitempty"`
+	DefinitionPath         string               `json:"definitionPath,omitempty"`
+	Path                   string               `json:"path,omitempty"`
+	Added                  time.Time            `json:"added"`
+	ShopHistory            []string             `json:"shopHistory,omitempty"`
 }
 
 type TrackDifficulty struct {
@@ -143,18 +143,18 @@ type InstrumentImages struct {
 }
 
 type Instrument struct {
-	ID            string            `json:"id"`
-	Name          string            `json:"name"`
-	Description   string            `json:"description"`
-	Type          BRCosmeticType    `json:"type"`
-	Rarity        BRCosmeticRarity  `json:"rarity"`
-	Images        InstrumentImages  `json:"images"`
-	Series        *BRCosmeticSeries `json:"series,omitempty"`
-	GameplayTags  []string          `json:"gameplayTags,omitempty"`
-	Path          string            `json:"path"`
-	ShowcaseVideo string            `json:"showcaseVideo,omitempty"`
-	Added         time.Time         `json:"added"`
-	ShopHistory   []string          `json:"shopHistory,omitempty"`
+	ID            string           `json:"id"`
+	Name          string           `json:"name"`
+	Description   string           `json:"description"`
+	Type          CosmeticType     `json:"type"`
+	Rarity        CosmeticRarity   `json:"rarity"`
+	Images        InstrumentImages `json:"images"`
+	Series        *CosmeticSeries  `json:"series,omitempty"`
+	GameplayTags  []string         `json:"gameplayTags,omitempty"`
+	Path          string           `json:"path"`
+	ShowcaseVideo string           `json:"showcaseVideo,omitempty"`
+	Added         time.Time        `json:"added"`
+	ShopHistory   []string         `json:"shopHistory,omitempty"`
 }
 
 type CarImages struct {
@@ -163,19 +163,19 @@ type CarImages struct {
 }
 
 type Car struct {
-	ID            string            `json:"id"`
-	VehicleID     string            `json:"vehicleId"`
-	Name          string            `json:"name"`
-	Description   string            `json:"description"`
-	Type          BRCosmeticType    `json:"type"`
-	Rarity        BRCosmeticRarity  `json:"rarity"`
-	Images        CarImages         `json:"images"`
-	Series        *BRCosmeticSeries `json:"series,omitempty"`
-	GameplayTags  []string          `json:"gameplayTags,omitempty"`
-	Path          string            `json:"path,omitempty"`
-	ShowcaseVideo string            `json:"showcaseVideo,omitempty"`
-	Added         time.Time         `json:"added"`
-	ShopHistory   []string          `json:"shopHistory,omitempty"`
+	ID            string          `json:"id"`
+	VehicleID     string          `json:"vehicleId"`
+	Name          string          `json:"name"`
+	Description   string          `json:"description"`
+	Type          CosmeticType    `json:"type"`
+	Rarity        CosmeticRarity  `json:"rarity"`
+	Images        CarImages       `json:"images"`
+	Series        *CosmeticSeries `json:"series,omitempty"`
+	GameplayTags  []string        `json:"gameplayTags,omitempty"`
+	Path          string          `json:"path,omitempty"`
+	ShowcaseVideo string          `json:"showcaseVideo,omitempty"`
+	Added         time.Time       `json:"added"`
+	ShopHistory   []string        `json:"shopHistory,omitempty"`
 }
 
 type LegoImages struct {
@@ -193,22 +193,22 @@ type Lego struct {
 	Added            time.Time  `json:"added"`
 }
 
-type LegoKitsImages struct {
+type LegoKitImages struct {
 	Small string `json:"small,omitempty"`
 	Large string `json:"large,omitempty"`
 	Wide  string `json:"wide,omitempty"`
 }
 
 type LegoKit struct {
-	ID           string            `json:"id"`
-	Name         string            `json:"name"`
-	Type         BRCosmeticType    `json:"type"`
-	Series       *BRCosmeticSeries `json:"series,omitempty"`
-	GameplayTags []string          `json:"gameplayTags,omitempty"`
-	Images       LegoKitsImages    `json:"images"`
-	Path         string            `json:"path,omitempty"`
-	Added        time.Time         `json:"added"`
-	ShopHistory  []string          `json:"shopHistory,omitempty"`
+	ID           string          `json:"id"`
+	Name         string          `json:"name"`
+	Type         CosmeticType    `json:"type"`
+	Series       *CosmeticSeries `json:"series,omitempty"`
+	GameplayTags []string        `json:"gameplayTags,omitempty"`
+	Images       LegoKitImages   `json:"images"`
+	Path         string          `json:"path,omitempty"`
+	Added        time.Time       `json:"added"`
+	ShopHistory  []string        `json:"shopHistory,omitempty"`
 }
 
 type BeanImages struct {

@@ -45,10 +45,6 @@ type NewsResponse struct {
 	Creative News `json:"creative"`
 }
 
-type BRNewsResponse News
-type STWNewsResponse News
-type CreativeNewsResponse News
-
 type NewsService struct {
 	client *Client
 }
@@ -57,14 +53,14 @@ func (s *NewsService) All(ctx context.Context, params *NewsParams) (*NewsRespons
 	return getJSON[*NewsResponse](ctx, s.client, "/v2/news", params)
 }
 
-func (s *NewsService) BR(ctx context.Context, params *BRNewsParams) (*BRNewsResponse, error) {
-	return getJSON[*BRNewsResponse](ctx, s.client, "/v2/news/br", params)
+func (s *NewsService) BR(ctx context.Context, params *BRNewsParams) (*News, error) {
+	return getJSON[*News](ctx, s.client, "/v2/news/br", params)
 }
 
-func (s *NewsService) STW(ctx context.Context, params *STWNewsParams) (*STWNewsResponse, error) {
-	return getJSON[*STWNewsResponse](ctx, s.client, "/v2/news/stw", params)
+func (s *NewsService) STW(ctx context.Context, params *STWNewsParams) (*News, error) {
+	return getJSON[*News](ctx, s.client, "/v2/news/stw", params)
 }
 
-func (s *NewsService) Creative(ctx context.Context, params *CreativeNewsParams) (*CreativeNewsResponse, error) {
-	return getJSON[*CreativeNewsResponse](ctx, s.client, "/v2/news/creative", params)
+func (s *NewsService) Creative(ctx context.Context, params *CreativeNewsParams) (*News, error) {
+	return getJSON[*News](ctx, s.client, "/v2/news/creative", params)
 }
