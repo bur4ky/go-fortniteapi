@@ -42,7 +42,7 @@ type PlaylistsService struct {
 }
 
 func (s *PlaylistsService) All(ctx context.Context, params *PlaylistsParams) ([]Playlist, error) {
-	return getJSON[[]Playlist](ctx, s.client, "/v1/playlists", params)
+	return s.client.get[[]Playlist](ctx, "/v1/playlists", params)
 }
 
 func (s *PlaylistsService) ByID(ctx context.Context, id string, params *PlaylistByIDParams) (*Playlist, error) {
@@ -50,5 +50,5 @@ func (s *PlaylistsService) ByID(ctx context.Context, id string, params *Playlist
 		return nil, emptyParamErr("id")
 	}
 
-	return getJSON[*Playlist](ctx, s.client, "/v1/playlists/"+id, params)
+	return s.client.get[*Playlist](ctx, "/v1/playlists/"+id, params)
 }

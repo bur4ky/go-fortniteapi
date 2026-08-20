@@ -50,17 +50,17 @@ type NewsService struct {
 }
 
 func (s *NewsService) All(ctx context.Context, params *NewsParams) (*NewsResponse, error) {
-	return getJSON[*NewsResponse](ctx, s.client, "/v2/news", params)
+	return s.client.get[*NewsResponse](ctx, "/v2/news", params)
 }
 
 func (s *NewsService) BR(ctx context.Context, params *BRNewsParams) (*News, error) {
-	return getJSON[*News](ctx, s.client, "/v2/news/br", params)
+	return s.client.get[*News](ctx, "/v2/news/br", params)
 }
 
 func (s *NewsService) STW(ctx context.Context, params *STWNewsParams) (*News, error) {
-	return getJSON[*News](ctx, s.client, "/v2/news/stw", params)
+	return s.client.get[*News](ctx, "/v2/news/stw", params)
 }
 
 func (s *NewsService) Creative(ctx context.Context, params *CreativeNewsParams) (*News, error) {
-	return getJSON[*News](ctx, s.client, "/v2/news/creative", params)
+	return s.client.get[*News](ctx, "/v2/news/creative", params)
 }

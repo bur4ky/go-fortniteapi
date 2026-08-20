@@ -138,7 +138,7 @@ func (s *StatsService) BRByName(ctx context.Context, name string, params *BRStat
 		return nil, err
 	}
 
-	return getJSON[*BRStatsResponse](ctx, s.client, "/v2/stats/br/v2", params)
+	return s.client.get[*BRStatsResponse](ctx, "/v2/stats/br/v2", params)
 }
 
 func (s *StatsService) BRByID(ctx context.Context, id string, params *BRStatsByIDParams) (*BRStatsResponse, error) {
@@ -154,5 +154,5 @@ func (s *StatsService) BRByID(ctx context.Context, id string, params *BRStatsByI
 		return nil, err
 	}
 
-	return getJSON[*BRStatsResponse](ctx, s.client, "/v2/stats/br/v2/"+id, params)
+	return s.client.get[*BRStatsResponse](ctx, "/v2/stats/br/v2/"+id, params)
 }

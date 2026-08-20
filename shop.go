@@ -116,5 +116,5 @@ type ShopService struct {
 }
 
 func (s *ShopService) Get(ctx context.Context, params *ShopParams) (*ShopResponse, error) {
-	return getJSON[*ShopResponse](ctx, s.client, "/v2/shop", params)
+	return s.client.get[*ShopResponse](ctx, "/v2/shop", params)
 }

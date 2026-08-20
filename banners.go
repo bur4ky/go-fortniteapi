@@ -35,9 +35,9 @@ type BannersService struct {
 }
 
 func (s *BannersService) All(ctx context.Context, params *BannersAllParams) ([]Banner, error) {
-	return getJSON[[]Banner](ctx, s.client, "/v1/banners", params)
+	return s.client.get[[]Banner](ctx, "/v1/banners", params)
 }
 
 func (s *BannersService) Colors(ctx context.Context, params *ResponseFlagsParams) ([]BannerColors, error) {
-	return getJSON[[]BannerColors](ctx, s.client, "/v1/banners/colors", params)
+	return s.client.get[[]BannerColors](ctx, "/v1/banners/colors", params)
 }

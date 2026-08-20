@@ -33,5 +33,5 @@ func (s *CreatorCodeService) Get(ctx context.Context, name string, params *Creat
 	}
 
 	params.Name = name
-	return getJSON[*CreatorCodeResponse](ctx, s.client, "/v2/creatorcode", params)
+	return s.client.get[*CreatorCodeResponse](ctx, "/v2/creatorcode", params)
 }

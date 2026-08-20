@@ -3,7 +3,7 @@ package fortniteapi
 import (
 	"bytes"
 	"context"
-	"encoding/json"
+	"encoding/json/v2"
 	"fmt"
 	"io"
 	"net/http"
@@ -89,58 +89,54 @@ func NewWithClient(language Language, apiKey string, client *http.Client) *Clien
 	return c
 }
 
-func (c *Client) do(ctx context.Context, method, path string, query, body, out any) error {
+func (c *Client) get[T any](ctx context.Context, path string, query any) (T, error) {
+	return c.do[T](ctx, http.MethodGet, path, query, nil)
+}
+
+func (c *Client) do[T any](ctx context.Context, method, path string, query, body any) (T, error) {
+	var zero T
 	fullURL, err := c.fullURL(path, query)
 	if err != nil {
-		return err
+		return zero, err
 	}
 
 	request, err := c.newRequest(ctx, method, fullURL.String(), body)
 	if err != nil {
-		return err
+		return zero, err
 	}
 
 	response, err := c.http.Do(request)
 	if err != nil {
-		return fmt.Errorf("send request: %w", err)
+		return zero, fmt.Errorf("send request: %w", err)
 	}
-
 	defer response.Body.Close()
-	decoder := json.NewDecoder(response.Body)
 
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		var apiError *Error
-		if err := decoder.Decode(apiError); err != nil {
-			return fmt.Errorf("decode error response: %w", err)
+		var respBody Error
+		if err := json.UnmarshalRead(response.Body, &respBody); err != nil {
+			return zero, fmt.Errorf("decode error response (status %d): %w", response.StatusCode, err)
 		}
 
-		return apiError
+		return zero, &respBody
 	}
 
-	var apiResponse Response[json.RawMessage]
-	if err := decoder.Decode(&apiResponse); err != nil {
-		return fmt.Errorf("decode response: %w", err)
+	var respBody Response[T]
+	if err := json.UnmarshalRead(response.Body, &respBody); err != nil {
+		return zero, fmt.Errorf("decode response: %w", err)
 	}
 
-	if out != nil {
-		if err := json.Unmarshal(apiResponse.Data, out); err != nil {
-			return fmt.Errorf("unmarshal data: %w", err)
-		}
-	}
-
-	return nil
+	return respBody.Data, nil
 }
 
 func (c *Client) newRequest(ctx context.Context, method, urlStr string, body any) (*http.Request, error) {
 	var bodyReader io.Reader
-
 	if body != nil {
-		jsonBytes, err := json.Marshal(body)
-		if err != nil {
+		var buf bytes.Buffer
+		if err := json.MarshalWrite(&buf, body); err != nil {
 			return nil, fmt.Errorf("marshal request body: %w", err)
 		}
 
-		bodyReader = bytes.NewReader(jsonBytes)
+		bodyReader = &buf
 	}
 
 	request, err := http.NewRequestWithContext(ctx, method, urlStr, bodyReader)
@@ -183,13 +179,6 @@ func (c *Client) fullURL(path string, query any) (*url.URL, error) {
 
 	fullURL.RawQuery = params.Encode()
 	return fullURL, nil
-}
-
-// TODO: Remove when generic types on methods are supported in Go 1.27
-func getJSON[T any](ctx context.Context, c *Client, path string, query any) (T, error) {
-	var out T
-	err := c.do(ctx, http.MethodGet, path, query, nil, &out)
-	return out, err
 }
 
 func emptyParamErr(name string) error {

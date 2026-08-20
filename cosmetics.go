@@ -326,39 +326,39 @@ type CosmeticsService struct {
 }
 
 func (s *CosmeticsService) All(ctx context.Context, params *AllCosmeticsParams) (*AllCosmeticsResponse, error) {
-	return getJSON[*AllCosmeticsResponse](ctx, s.client, "/v2/cosmetics", params)
+	return s.client.get[*AllCosmeticsResponse](ctx, "/v2/cosmetics", params)
 }
 
 func (s *CosmeticsService) New(ctx context.Context, params *NewCosmeticsParams) (*NewCosmeticsResponse, error) {
-	return getJSON[*NewCosmeticsResponse](ctx, s.client, "/v2/cosmetics/new", params)
+	return s.client.get[*NewCosmeticsResponse](ctx, "/v2/cosmetics/new", params)
 }
 
 func (s *CosmeticsService) AllBRCosmetics(ctx context.Context, params *AllBRCosmeticsParams) ([]BRCosmetic, error) {
-	return getJSON[[]BRCosmetic](ctx, s.client, "/v2/cosmetics/br", params)
+	return s.client.get[[]BRCosmetic](ctx, "/v2/cosmetics/br", params)
 }
 
 func (s *CosmeticsService) AllTracks(ctx context.Context, params *AllTracksParams) ([]Track, error) {
-	return getJSON[[]Track](ctx, s.client, "/v2/cosmetics/tracks", params)
+	return s.client.get[[]Track](ctx, "/v2/cosmetics/tracks", params)
 }
 
 func (s *CosmeticsService) AllInstruments(ctx context.Context, params *AllInstrumentsParams) ([]Instrument, error) {
-	return getJSON[[]Instrument](ctx, s.client, "/v2/cosmetics/instruments", params)
+	return s.client.get[[]Instrument](ctx, "/v2/cosmetics/instruments", params)
 }
 
 func (s *CosmeticsService) AllCars(ctx context.Context, params *AllCarsParams) ([]Car, error) {
-	return getJSON[[]Car](ctx, s.client, "/v2/cosmetics/cars", params)
+	return s.client.get[[]Car](ctx, "/v2/cosmetics/cars", params)
 }
 
 func (s *CosmeticsService) AllLego(ctx context.Context, params *AllLegoParams) ([]Lego, error) {
-	return getJSON[[]Lego](ctx, s.client, "/v2/cosmetics/lego", params)
+	return s.client.get[[]Lego](ctx, "/v2/cosmetics/lego", params)
 }
 
 func (s *CosmeticsService) AllLegoKits(ctx context.Context, params *AllLegoKitsParams) ([]LegoKit, error) {
-	return getJSON[[]LegoKit](ctx, s.client, "/v2/cosmetics/lego/kits", params)
+	return s.client.get[[]LegoKit](ctx, "/v2/cosmetics/lego/kits", params)
 }
 
 func (s *CosmeticsService) AllBeans(ctx context.Context, params *AllBeansParams) ([]Bean, error) {
-	return getJSON[[]Bean](ctx, s.client, "/v2/cosmetics/beans", params)
+	return s.client.get[[]Bean](ctx, "/v2/cosmetics/beans", params)
 }
 
 func (s *CosmeticsService) BRCosmeticByID(ctx context.Context, id string, params *BRCosmeticByIDParams) (*BRCosmetic, error) {
@@ -366,7 +366,7 @@ func (s *CosmeticsService) BRCosmeticByID(ctx context.Context, id string, params
 		return nil, emptyParamErr("id")
 	}
 
-	return getJSON[*BRCosmetic](ctx, s.client, "/v2/cosmetics/br/"+id, params)
+	return s.client.get[*BRCosmetic](ctx, "/v2/cosmetics/br/"+id, params)
 }
 
 func (s *CosmeticsService) SearchBRCosmetic(ctx context.Context, params *SearchBRCosmeticParams) (*BRCosmetic, error) {
@@ -378,7 +378,7 @@ func (s *CosmeticsService) SearchBRCosmetic(ctx context.Context, params *SearchB
 		params.SearchLanguage = s.client.language
 	}
 
-	return getJSON[*BRCosmetic](ctx, s.client, "/v2/cosmetics/br/search", params)
+	return s.client.get[*BRCosmetic](ctx, "/v2/cosmetics/br/search", params)
 }
 
 func (s *CosmeticsService) SearchBRCosmetics(ctx context.Context, params *SearchBRCosmeticsParams) ([]BRCosmetic, error) {
@@ -390,7 +390,7 @@ func (s *CosmeticsService) SearchBRCosmetics(ctx context.Context, params *Search
 		params.SearchLanguage = s.client.language
 	}
 
-	return getJSON[[]BRCosmetic](ctx, s.client, "/v2/cosmetics/br/search/all", params)
+	return s.client.get[[]BRCosmetic](ctx, "/v2/cosmetics/br/search/all", params)
 }
 
 func (s *CosmeticsService) SearchBRCosmeticsByIDs(ctx context.Context, ids []string, params *BRCosmeticsSearchByIDsParams) ([]BRCosmetic, error) {
@@ -398,7 +398,5 @@ func (s *CosmeticsService) SearchBRCosmeticsByIDs(ctx context.Context, ids []str
 		return nil, emptyParamErr("ids")
 	}
 
-	var out []BRCosmetic
-	err := s.client.do(ctx, http.MethodPost, "/v2/cosmetics/br/search/ids", params, ids, &out)
-	return out, err
+	return s.client.do[[]BRCosmetic](ctx, http.MethodPost, "/v2/cosmetics/br/search/ids", params, ids)
 }

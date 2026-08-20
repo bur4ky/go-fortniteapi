@@ -1,6 +1,6 @@
 module github.com/bur4ky/go-fortniteapi
 
-go 1.26.0
+go 1.27.0
 
 require (
 	github.com/google/go-querystring v1.2.0

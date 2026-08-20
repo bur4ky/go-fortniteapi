@@ -38,5 +38,5 @@ type AESService struct {
 }
 
 func (s *AESService) Key(ctx context.Context, params *AESKeyParams) (*AESKeyResponse, error) {
-	return getJSON[*AESKeyResponse](ctx, s.client, "/v2/aes", params)
+	return s.client.get[*AESKeyResponse](ctx, "/v2/aes", params)
 }
