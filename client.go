@@ -158,11 +158,9 @@ func (c *Client) newRequest(ctx context.Context, method, urlStr string, body any
 }
 
 func (c *Client) fullURL(path string, query any) (*url.URL, error) {
-	fullURL, err := c.baseURL.Parse(path)
-	if err != nil {
-		return nil, err
-	}
+	fullURL := c.baseURL.JoinPath(path)
 
+	var err error
 	params := url.Values{}
 	if values, ok := query.(url.Values); ok {
 		params = values
